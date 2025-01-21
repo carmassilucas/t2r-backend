@@ -82,6 +82,7 @@ public class InterlocutorService {
                 interlocutor.getId(),
                 interlocutor.getName(),
                 interlocutor.getAboutMe(),
+                interlocutor.getEmail(),
                 interlocutor.getInterlocutorType(),
                 interlocutor.getDateOfBirth(),
                 interlocutor.getCurrentState(),

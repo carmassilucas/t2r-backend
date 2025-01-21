@@ -15,14 +15,18 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final SecurityFilterInterConfig securityFilterInterConfig;
+    private final CorsConfig corsConfig;
 
-    public SecurityConfig(SecurityFilterInterConfig securityFilterInterConfig) {
+    public SecurityConfig(SecurityFilterInterConfig securityFilterInterConfig, CorsConfig corsConfig) {
         this.securityFilterInterConfig = securityFilterInterConfig;
+        this.corsConfig = corsConfig;
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .cors(httpSecurityCorsConfigurer -> corsConfig.corsConfigurationSource())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorization) ->
                     authorization.requestMatchers(HttpMethod.POST, "/interlocutor").permitAll()
                             .requestMatchers(HttpMethod.POST, "/interlocutor/auth").permitAll()
