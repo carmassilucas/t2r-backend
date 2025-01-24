@@ -26,29 +26,22 @@ public class SecurityFilterInterConfig extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String header = request.getHeader("Authorization");
-
         if (header == null) {
             filterChain.doFilter(request, response);
             return;
         }
-
         var verifyer = JWT.require(Algorithm.HMAC256(authenticateAlgorithmSecret))
                 .withIssuer(authenticateJwtIssuer)
                 .build();
-
         var token = verifyer.verify(header.replace("Bearer ", ""));
-
         if (token == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-
         request.setAttribute("interlocutor_id", token.getSubject());
-
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(token.getSubject(), null, null)
         );
-
         filterChain.doFilter(request, response);
     }
 }

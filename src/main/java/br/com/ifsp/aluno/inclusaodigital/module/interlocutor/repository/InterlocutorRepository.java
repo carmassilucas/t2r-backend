@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -18,17 +17,16 @@ public interface InterlocutorRepository extends JpaRepository<Interlocutor, UUID
     @Query(
             value = "select interlocutor.* " +
                     "from tb_interlocutor interlocutor " +
-                    "left join tb_interlocutor_type type on interlocutor.interlocutor_type_id = type.id " +
-                    "where interlocutor.current_state ilike %:state% " +
-                    "and interlocutor.current_city ilike %:city% " +
-                    "and type.description in :interlocutorTypes " +
+                    "where (:state is null or interlocutor.current_state ilike concat('%', :state, '%')) " +
+                    "and (:city is null or interlocutor.current_city ilike concat('%', :city, '%')) " +
+                    "and (:name is null or interlocutor.name ilike concat('%', :name, '%')) " +
                     "and interlocutor.id <> :id",
             nativeQuery = true
     )
     List<Interlocutor> findByFilters(
             @Param("state") String state,
             @Param("city") String city,
-            @Param("interlocutorTypes") Set<String> interlocutorTypes,
+            @Param("name") String name,
             @Param("id") UUID id
     );
 }

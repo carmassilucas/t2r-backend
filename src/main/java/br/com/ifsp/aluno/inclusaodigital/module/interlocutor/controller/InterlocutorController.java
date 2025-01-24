@@ -34,8 +34,8 @@ public class InterlocutorController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<Interlocutor>> findByFilter(@Valid @RequestBody FindInterlocutorsByFilterRequest dto,
+    @PostMapping("/search")
+    public ResponseEntity<List<FindByFiltersResponse>> findByFilter(@Valid @RequestBody FindInterlocutorsByFilterRequest dto,
                                                            HttpServletRequest httpServletRequest) {
         var id = UUID.fromString((String) httpServletRequest.getAttribute("interlocutor_id"));
 

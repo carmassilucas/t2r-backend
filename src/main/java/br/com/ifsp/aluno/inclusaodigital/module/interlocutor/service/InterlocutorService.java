@@ -119,8 +119,20 @@ public class InterlocutorService {
         this.interlocutorRepository.saveAndFlush(interlocutor);
     }
 
-    public List<Interlocutor> findInterlocutorsByFilter(FindInterlocutorsByFilterRequest dto, UUID id) {
-        return this.interlocutorRepository.findByFilters(dto.state(), dto.city(), dto.interlocutorTypes(), id);
+    public List<FindByFiltersResponse> findInterlocutorsByFilter(FindInterlocutorsByFilterRequest dto, UUID id) {
+        var interlocutors = this.interlocutorRepository.findByFilters(dto.currentState(), dto.currentCity(), dto.name(), id);
+
+        return interlocutors.stream().map(
+                interlocutor -> new FindByFiltersResponse(
+                        interlocutor.getId(),
+                        interlocutor.getName(),
+                        interlocutor.getAboutMe(),
+                        interlocutor.getInterlocutorType(),
+                        interlocutor.getCurrentState(),
+                        interlocutor.getCurrentCity(),
+                        interlocutor.getProfilePicture()
+                )
+        ).toList();
     }
 
     private void updateInterlocutor(Interlocutor interlocutor, UpdateInterlocutorRequest dto) {
