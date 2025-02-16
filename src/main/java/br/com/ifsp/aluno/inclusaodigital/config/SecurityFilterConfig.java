@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class SecurityFilterInterConfig extends OncePerRequestFilter {
+public class SecurityFilterConfig extends OncePerRequestFilter {
     @Value("authentication.jwt.issuer")
     private String authenticateJwtIssuer;
 

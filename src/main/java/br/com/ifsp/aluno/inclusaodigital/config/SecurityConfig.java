@@ -14,11 +14,11 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final SecurityFilterInterConfig securityFilterInterConfig;
+    private final SecurityFilterConfig securityFilterConfig;
     private final CorsConfig corsConfig;
 
-    public SecurityConfig(SecurityFilterInterConfig securityFilterInterConfig, CorsConfig corsConfig) {
-        this.securityFilterInterConfig = securityFilterInterConfig;
+    public SecurityConfig(SecurityFilterConfig securityFilterConfig, CorsConfig corsConfig) {
+        this.securityFilterConfig = securityFilterConfig;
         this.corsConfig = corsConfig;
     }
 
@@ -30,8 +30,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorization) ->
                     authorization.requestMatchers(HttpMethod.POST, "/interlocutor").permitAll()
                             .requestMatchers(HttpMethod.POST, "/interlocutor/auth").permitAll()
+                            .requestMatchers("/t2r-websocket/**").permitAll()
                             .anyRequest().authenticated())
-                .addFilterBefore(securityFilterInterConfig, AuthorizationFilter.class);
+                .addFilterBefore(securityFilterConfig, AuthorizationFilter.class);
 
         return http.build();
     }

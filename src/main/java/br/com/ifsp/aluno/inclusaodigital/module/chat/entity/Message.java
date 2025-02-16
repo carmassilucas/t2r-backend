@@ -32,8 +32,8 @@ public class Message implements Serializable {
     @JoinColumn(name = "reply_message_id")
     private Message replyTo;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     private Interlocutor sender;
 
