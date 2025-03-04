@@ -14,7 +14,7 @@
 	<name>inclusao-digital</name>
 	<description>Sistema de troca de mensagens via chat para auxiliar refugiados à se integrarem em uma nova comunidade</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>22</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
