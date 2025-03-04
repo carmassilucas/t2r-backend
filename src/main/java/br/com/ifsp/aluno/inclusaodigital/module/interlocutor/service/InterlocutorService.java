@@ -22,17 +22,19 @@ import java.util.UUID;
 
 @Service
 public class InterlocutorService {
+    private final String authenticateJwtIssuer;
 
-    @Value("authentication.jwt.issuer")
-    private String authenticateJwtIssuer;
-
-    @Value("authentication.algorithm.secret")
-    private String authenticateAlgorithmSecret;
+    private final String authenticateAlgorithmSecret;
 
     private final InterlocutorRepository interlocutorRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public InterlocutorService(InterlocutorRepository interlocutorRepository, PasswordEncoder passwordEncoder) {
+    public InterlocutorService(@Value("authentication.jwt.issuer") String authenticateJwtIssuer,
+                               @Value("${authentication.algorithm.secret}") String authenticateAlgorithmSecret,
+                               InterlocutorRepository interlocutorRepository,
+                               PasswordEncoder passwordEncoder) {
+        this.authenticateJwtIssuer = authenticateJwtIssuer;
+        this.authenticateAlgorithmSecret = authenticateAlgorithmSecret;
         this.interlocutorRepository = interlocutorRepository;
         this.passwordEncoder = passwordEncoder;
     }

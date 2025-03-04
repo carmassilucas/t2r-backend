@@ -16,11 +16,11 @@ import java.io.IOException;
 
 @Component
 public class SecurityFilterConfig extends OncePerRequestFilter {
-    @Value("authentication.jwt.issuer")
-    private String authenticateJwtIssuer;
+    @Value("${authentication.jwt.issuer}")
+    private String issuer;
 
-    @Value("authentication.algorithm.secret")
-    private String authenticateAlgorithmSecret;
+    @Value("${authentication.algorithm.secret}")
+    private String secret;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -30,10 +30,10 @@ public class SecurityFilterConfig extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        var verifyer = JWT.require(Algorithm.HMAC256(authenticateAlgorithmSecret))
-                .withIssuer(authenticateJwtIssuer)
+        var verifier = JWT.require(Algorithm.HMAC256(secret))
+                .withIssuer(issuer)
                 .build();
-        var token = verifyer.verify(header.replace("Bearer ", ""));
+        var token = verifier.verify(header.replace("Bearer ", ""));
         if (token == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
